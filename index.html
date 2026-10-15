@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BHOOMINETRA | Drone Engineering Lab</title>
+
+<style>
+:root {
+  --bg: #0b1020;
+  --panel: #141c2e;
+  --panel2: #1b2740;
+  --border: #2c3a52;
+  --text: #edf4ff;
+  --muted: #9eacc4;
+  --green: #a8ed72;
+  --cyan: #65d9ef;
+  --red: #ff8585;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+}
+header {
+  padding: 23px 18px;
+  background: linear-gradient(120deg, #142b30, #111a30 65%, #20301f);
+  border-bottom: 1px solid var(--border);
+}
+.brand {
+  font-size: 25px;
+  font-weight: 900;
+  letter-spacing: 1.4px;
+}
+.brand span { color: var(--green); }
+.subtitle {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 4px;
+}
+.badge {
+  display: inline-block;
+  margin-top: 12px;
+  border: 1px solid #47643c;
+  color: var(--green);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+nav {
+  display: flex;
+  gap: 7px;
+  padding: 12px;
+  overflow-x: auto;
+  background: #0e1626;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+nav button {
+  white-space: nowrap;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid transparent;
+  padding: 10px 13px;
+  border-radius: 9px;
+  cursor: pointer;
+}
+nav button.active {
+  color: var(--green);
+  background: #1a2a30;
+  border-color: #3b5a46;
+}
+main {
+  max-width: 1050px;
+  margin: auto;
+  padding: 19px 14px 45px;
+}
+section { display: none; }
+section.active { display: block; }
+h2 { font-size: 22px; margin: 8px 0 5px; }
+h3 { font-size: 16px; margin: 0 0 14px; }
+.description { color: var(--muted); font-size: 13px; margin: 0 0 20px; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+.card, .panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 17px;
+  min-width: 0;
+}
+.metric-label {
+  color: var(--muted);
+  font-size: 12px;
+}
+.metric {
+  font-size: 25px;
+  font-weight: 800;
+  margin-top: 8px;
+  overflow-wrap: anywhere;
+}
+.green { color: var(--green); }
+.cyan { color: var(--cyan); }
+.muted { color: var(--muted); }
+.stack { display: grid; gap: 15px; }
+label {
+  display: block;
+  color: #c4d0e5;
+  font-size: 12px;
+  margin: 12px 0 6px;
+}
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 9px;
+  border: 1px solid #394963;
+  background: #0c1424;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--cyan);
+}
+textarea { min-height: 72px; resize: vertical; }
+.row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+button {
+  font: inherit;
+}
+.btn {
+  background: var(--green);
+  color: #14200e;
+  font-weight: 800;
+  border: none;
+  border-radius: 9px;
+  padding: 12px 15px;
+  margin-top: 14px;
+  cursor: pointer;
+}
+.btn.secondary {
+  background: #25344d;
+  color: var(--text);
+  border: 1px solid #40516e;
+}
+.btn.danger {
+  background: #3b2029;
+  color: #ffaaaa;
+  border: 1px solid #71404a;
+}
+.btn.small {
+  font-size: 12px;
+  padding: 7px 10px;
+  margin: 3px 3px 3px 0;
+}
+.full { width: 100%; }
+.result {
+  background: #101d28;
+  border: 1px solid #345044;
+  padding: 15px;
+  margin-top: 15px;
+  border-radius: 10px;
+}
+.result strong { color: var(--green); }
+.warning {
+  color: #f6d99a;
+  background: #2b2518;
+  border: 1px solid #5b4a2d;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 12px;
+  margin-top: 14px;
+}
+.table-wrap { overflow-x: auto; margin-top: 14px; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  min-width: 590px;
+}
+th, td {
+  padding: 11px 9px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+th { color: var(--muted); font-weight: 600; }
+td { overflow-wrap: anywhere; }
+.empty {
+  text-align: center;
+  padding: 28px 10px;
+  color: var(--muted);
+}
+.component-card {
+  padding: 14px;
+  background: #101a2b;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  margin-top: 10px;
+}
+.component-title { font-weight: 750; }
+.component-meta { color: var(--muted); font-size: 12px; margin: 5px 0; }
+a { color: var(--cyan); overflow-wrap: anywhere; }
+footer {
+  border-top: 1px solid var(--border);
+  padding: 20px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 11px;
+}
+hr { border: 0; border-top: 1px solid var(--border); margin: 18px 0; }
+@media (min-width: 700px) {
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+  header { padding-left: max(22px, calc((100vw - 1010px)/2)); }
+}
+@media (max-width: 380px) {
+  .row { grid-template-columns: 1fr; }
+  .metric { font-size: 21px; }
+  main { padding-left: 10px; padding-right: 10px; }
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="brand">BHOOMI<span>NETRA</span></div>
+  <div class="subtitle">DRONE ENGINEERING LAB · COMPONENTS · PHYSICS</div>
+  <div class="badge">ENGINEERING CONSOLE v1.0</div>
+</header>
+
+<nav>
+  <button class="active" data-tab="dashboard">⌂ Dashboard</button>
+  <button data-tab="components">▦ Components</button>
+  <button data-tab="thrust">↗ Thrust</button>
+  <button data-tab="rpm">⟳ RPM Lab</button>
+  <button data-tab="data">⇩ Data & Help</button>
+</nav>
+
+<main>
+<section id="dashboard" class="active">
+  <h2>Mission overview</h2>
+  <p class="description">Your drone's engineering status at a glance.</p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="metric-label">TOTAL MASS</div>
+      <div class="metric green" id="dashMass">0 g</div>
+      <div class="metric-label">All recorded components</div>
+    </div>
+    <div class="card">
+      <div class="metric-label">TOTAL WEIGHT</div>
+      <div class="metric cyan" id="dashWeight">0 N</div>
+      <div class="metric-label">Using g = 9.80665 m/s²</div>
+    </div>
+    <div class="card">
+      <div class="metric-label">COMPONENT TYPES</div>
+      <div class="metric" id="dashCount">0</div>
+      <div class="metric-label">Recorded entries</div>
+    </div>
+    <div class="card">
+      <div class="metric-label">TARGET THRUST</div>
+      <div class="metric green" id="dashThrust">0 N</div>
+      <div class="metric-label">At the selected ratio</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>System configuration</h3>
+    <div class="row">
+      <div>
+        <label>Target thrust-to-weight ratio</label>
+        <select id="globalRatio">
+          <option value="2">2:1</option>
+          <option value="3">3:1</option>
+          <option value="4" selected>4:1</option>
+          <option value="5">5:1</option>
+        </select>
+      </div>
+      <div>
+        <label>Number of motors</label>
+        <select id="globalMotors">
+          <option value="4" selected>4 motors</option>
+          <option value="6">6 motors</option>
+          <option value="8">8 motors</option>
+        </select>
+      </div>
+    </div>
+    <p class="description" style="margin-top:12px;margin-bottom:0">
+      These settings are used by the thrust calculator. A target ratio is not a guarantee of stable or safe flight.
+    </p>
+  </div>
+
+  <div class="panel" style="margin-top:15px">
+    <h3>Recent components</h3>
+    <div id="recentComponents" class="empty">No components added yet.</div>
+    <button class="btn full" onclick="showTab('components')">+ Open component database</button>
+  </div>
+</section>
+
+<section id="components">
+  <h2>Component database</h2>
+  <p class="description">Record the mass, quantity, source and specifications of each part.</p>
+
+  <div class="panel">
+    <h3 id="formHeading">Add a component</h3>
+    <form id="componentForm">
+      <input type="hidden" id="editId">
+
+      <label for="partName">Component name *</label>
+      <input id="partName" required maxlength="100" placeholder="e.g. MPU-6050 IMU">
+
+      <label for="category">Category *</label>
+      <select id="category" required>
+        <option>Flight Controller</option>
+        <option>Sensors</option>
+        <option>Motors</option>
+        <option>Propellers</option>
+        <option>Battery</option>
+        <option>Frame & Structure</option>
+        <option>Motor Drivers & ESCs</option>
+        <option>Power Management</option>
+        <option>Wiring & Connectors</option>
+        <option>Mounting Hardware</option>
+        <option>Camera & Imaging</option>
+        <option>Communication</option>
+        <option>Other</option>
+      </select>
+
+      <div class="row">
+        <div>
+          <label for="partMass">Mass per unit (g) *</label>
+          <input id="partMass" type="number" min="0" step="any" required placeholder="e.g. 30">
+        </div>
+        <div>
+          <label for="partQty">Quantity *</label>
+          <input id="partQty" type="number" min="1" max="10000" step="1" value="1" required>
+        </div>
+      </div>
+
+      <label for="partPrice">Price per unit (₹, optional)</label>
+      <input id="partPrice" type="number" min="0" step="any" placeholder="e.g. 516">
+
+      <label for="partUrl">Product URL (optional)</label>
+      <input id="partUrl" type="url" placeholder="https://...">
+
+      <label for="partSource">Specification source (optional)</label>
+      <input id="partSource" maxlength="200" placeholder="e.g. manufacturer datasheet">
+
+      <label for="partNotes">Specifications and notes</label>
+      <textarea id="partNotes" maxlength="2000" placeholder="Voltage, dimensions, thrust data, uncertainties..."></textarea>
+
+      <button class="btn full" type="submit" id="savePart">+ Save component</button>
+      <button class="btn secondary full" type="button" id="cancelEdit" hidden>Cancel editing</button>
+    </form>
+  </div>
+
+  <div class="panel" style="margin-top:15px">
+    <h3>Inventory</h3>
+    <div class="row">
+      <div>
+        <label for="filterCategory">Filter category</label>
+        <select id="filterCategory">
+          <option value="">All categories</option>
+          <option>Flight Controller</option>
+          <option>Sensors</option>
+          <option>Motors</option>
+          <option>Propellers</option>
+          <option>Battery</option>
+          <option>Frame & Structure</option>
+          <option>Motor Drivers & ESCs</option>
+          <option>Power Management</option>
+          <option>Wiring & Connectors</option>
+          <option>Mounting Hardware</option>
+          <option>Camera & Imaging</option>
+          <option>Communication</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div>
+        <label for="searchParts">Search</label>
+        <input id="searchParts" placeholder="Search components...">
+      </div>
+    </div>
+    <div id="inventory"></div>
+  </div>
+</section>
+
+<section id="thrust">
+  <h2>Thrust calculator</h2>
+  <p class="description">Estimate the thrust target from recorded mass and your chosen thrust-to-weight ratio.</p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="metric-label">ALL RECORDED MASS</div>
+      <div class="metric green" id="thrustMass">0 g</div>
+    </div>
+    <div class="card">
+      <div class="metric-label">WEIGHT</div>
+      <div class="metric cyan" id="thrustWeight">0 N</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Design targets</h3>
+    <div class="row">
+      <div>
+        <label for="thrustRatio">Target thrust-to-weight ratio</label>
+        <select id="thrustRatio">
+          <option value="2">2:1</option>
+          <option value="3">3:1</option>
+          <option value="4" selected>4:1</option>
+          <option value="5">5:1</option>
+        </select>
+      </div>
+      <div>
+        <label for="motorCount">Number of motors</label>
+        <select id="motorCount">
+          <option value="4" selected>4 motors</option>
+          <option value="6">6 motors</option>
+          <option value="8">8 motors</option>
+        </select>
+      </div>
+    </div>
+    <div id="thrustResults" class="result"></div>
+  </div>
+
+  <div class="warning">
+    <strong>Important:</strong> This calculation assumes the recorded mass includes every flight component. Add the frame, battery, wiring, flight controller, payload and mounting hardware. Per-motor thrust is a mathematical target, not verified motor performance. Check manufacturer thrust tests for the exact motor, propeller and battery combination.
+  </div>
+</section>
+
+<section id="rpm">
+  <h2>Propeller RPM lab</h2>
+  <p class="description">Estimate rotational speed from a simplified static-thrust model.</p>
+
+  <div class="panel">
+    <h3>Thrust model inputs</h3>
+
+    <label for="rpmThrust">Thrust per propeller (N)</label>
+    <input id="rpmThrust" type="number" min="0.000001" step="any" value="1.7659">
+
+    <label for="ct">Thrust coefficient, Ct</label>
+    <input id="ct" type="number" min="0.000001" step="any" value="0.174">
+
+    <label for="rho">Air density (kg/m³)</label>
+    <input id="rho" type="number" min="0.1" step="any" value="1.225">
+
+    <label for="diameter">Propeller diameter (mm)</label>
+    <input id="diameter" type="number" min="1" step="any" value="75">
+
+    <button class="btn full" id="calculateRpm">Calculate estimated RPM</button>
+
+    <div id="rpmResults" class="result" aria-live="polite">
+      Enter values and calculate.
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:15px">
+    <h3>Equation used</h3>
+    <p>For the simplified static-thrust model:</p>
+    <p><strong>T = Ct × ρ × n² × D⁴</strong></p>
+    <p>Rearranging:</p>
+    <p><strong>n = √[T / (Ct × ρ × D⁴)]</strong></p>
+    <p>RPM = 60 × n</p>
+    <p class="description">
+      T = thrust in newtons; Ct = dimensionless thrust coefficient; ρ = air density in kg/m³; n = revolutions per second; D = propeller diameter in metres.
+    </p>
+    <div class="warning">
+      Ct depends on the actual propeller and operating conditions. Unless Ct is measured or supplied for your exact propeller, the result is only a mathematical estimate. Do not use the result alone to select a motor, battery or safe operating speed.
+    </div>
+  </div>
+</section>
+
+<section id="data">
+  <h2>Data & documentation</h2>
+  <p class="description">Export your inventory and understand where your information is stored.</p>
+
+  <div class="panel">
+    <h3>Export inventory</h3>
+    <p class="description">Download your components as a CSV file that can be opened in spreadsheet software.</p>
+    <button class="btn full" id="exportCsv">⇩ Export components as CSV</button>
+    <button class="btn secondary full" id="exportJson">⇩ Export full backup as JSON</button>
+  </div>
+
+  <div class="panel" style="margin-top:15px">
+    <h3>Import backup</h3>
+    <p class="description">Restore a JSON backup previously exported from this app. Importing replaces the current inventory.</p>
+    <label for="importFile">Choose JSON backup</label>
+    <input id="importFile" type="file" accept=".json,application/json">
+    <button class="btn secondary full" id="importJson">Import selected backup</button>
+  </div>
+
+  <div class="panel" style="margin-top:15px">
+    <h3>Storage & limitations</h3>
+    <p class="description">
+      This version stores inventory in the browser's local storage. It does not automatically synchronize data between different phones or users. Export a backup before clearing browser data.
+    </p>
+    <p class="description">
+      Product URLs and specification sources are stored as references. This application does not automatically open product pages, scrape specifications or independently verify manufacturer claims.
+    </p>
+    <button class="btn danger full" id="clearData">Delete all local component data</button>
+  </div>
+
+  <div class="panel" style="margin-top:15px">
+    <h3>Engineering constants</h3>
+    <p>Standard gravitational acceleration used: <strong>9.80665 m/s²</strong></p>
+    <p>Mass conversion: <strong>1 kg = 1000 g</strong></p>
+    <p>Thrust and weight are expressed in <strong>newtons (N)</strong>.</p>
+    <p class="description">Keep units consistent. A mass in kilograms is not the same quantity as a weight in newtons.</p>
+  </div>
+</section>
+</main>
+
+<footer>
+  BHOOMINETRA ENGINEERING LAB · v1.0<br>
+  Engineering estimates only. Verify calculations and hardware specifications before testing.
+</footer>
+
+<script>
+"use strict";
+
+const G = 9.80665;
+const STORAGE_KEY = "bhoominetra_components_v1";
+const SETTINGS_KEY = "bhoominetra_settings_v1";
+
+let components = [];
+let settings = { ratio: 4, motors: 4 };
+
+const $ = id => document.getElementById(id);
+const num = value => Number(value);
+const fmt = (value, digits = 3) =>
+  Number.isFinite(value)
+    ? value.toLocaleString("en-IN", { maximumFractionDigits: digits })
+    : "—";
+
+function safeLoad() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    if (Array.isArray(saved)) {
+      components = saved.filter(c =>
+        c && typeof c.id === "string" &&
+        typeof c.name === "string" &&
+        Number.isFinite(Number(c.mass)) &&
+        Number.isFinite(Number(c.qty)) &&
+        Number(c.mass) >= 0 &&
+        Number(c.qty) >= 1
+      );
+    }
+    const s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
+    if ([2,3,4,5].includes(Number(s.ratio))) settings.ratio = Number(s.ratio);
+    if ([4,6,8].includes(Number(s.motors))) settings.motors = Number(s.motors);
+  } catch (e) {
+    console.warn("Could not load saved data.", e);
+  }
+}
+
+function persist() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(components));
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  } catch (e) {
+    alert("The browser could not save the data. Export a backup and check browser storage settings.");
+  }
+}
+
+function totalMassG() {
+  return components.reduce((sum, c) => sum + Number(c.mass) * Number(c.qty), 0);
+}
+function totalCost() {
+  return components.reduce((sum, c) => sum +
+    (c.price === "" || c.price == null ? 0 : Number(c.price)) * Number(c.qty), 0);
+}
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  })[char]);
+}
+function safeUrl(value) {
+  try {
+    const u = new URL(value);
+    return ["http:", "https:"].includes(u.protocol) ? u.href : "";
+  } catch {
+    return "";
+  }
+}
+
+function showTab(id) {
+  document.querySelectorAll("main section").forEach(s => s.classList.toggle("active", s.id === id));
+  document.querySelectorAll("nav button").forEach(b => b.classList.toggle("active", b.dataset.tab === id));
+  if (id === "thrust") updateThrust();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+document.querySelectorAll("nav button").forEach(b =>
+  b.addEventListener("click", () => showTab(b.dataset.tab))
+);
+
+function updateDashboard() {
+  const mass = totalMassG();
+  const weight = mass / 1000 * G;
+  $("dashMass").textContent = fmt(mass) + " g";
+  $("dashWeight").textContent = fmt(weight) + " N";
+  $("dashCount").textContent = components.length;
+  $("dashThrust").textContent = fmt(weight * settings.ratio) + " N";
+
+  $("globalRatio").value = String(settings.ratio);
+  $("globalMotors").value = String(settings.motors);
+  $("thrustRatio").value = String(settings.ratio);
+  $("motorCount").value = String(settings.motors);
+
+  $("thrustMass").textContent = fmt(mass) + " g";
+  $("thrustWeight").textContent = fmt(weight) + " N";
+
+  if (components.length === 0) {
+    $("recentComponents").innerHTML = '<div class="empty">No components yet. Add your first part in the Components tab.</div>';
+  } else {
+    $("recentComponents").innerHTML = components.slice(-3).reverse().map(c =>
+      `<div class="component-card">
+        <div class="component-title">${escapeHtml(c.name)}</div>
+        <div class="component-meta">${escapeHtml(c.category)} · ${fmt(c.mass * c.qty)} g total</div>
+      </div>`
+    ).join("");
+  }
+  updateThrust();
+}
+
+function updateThrust() {
+  const massKg = totalMassG() / 1000;
+  const weight = massKg * G;
+  const ratio = num($("thrustRatio").value || settings.ratio);
+  const motors = num($("motorCount").value || settings.motors);
+  const totalTarget = weight * ratio;
+  const perMotor = motors > 0 ? totalTarget / motors : 0;
+
+  $("thrustResults").innerHTML = `
+    <p>Recorded mass: <strong>${fmt(massKg, 4)} kg</strong></p>
+    <p>Weight, W = mg: <strong>${fmt(weight, 4)} N</strong></p>
+    <p>Ideal hover thrust (total): <strong>${fmt(weight, 4)} N</strong></p>
+    <hr>
+    <p>Selected target ratio: <strong>${ratio}:1</strong></p>
+    <p>Total target thrust = ${ratio} × W:</p>
+    <p><strong>${fmt(totalTarget, 4)} N</strong></p>
+    <p>Motors: <strong>${motors}</strong></p>
+    <p>Equal-share target per motor:</p>
+    <p><strong>${fmt(perMotor, 4)} N per motor</strong></p>
+    <p>Approximate equivalent per motor: <strong>${fmt(perMotor / G * 1000)} gram-force</strong></p>
+  `;
+}
+
+$("globalRatio").addEventListener("change", () => {
+  settings.ratio = num($("globalRatio").value);
+  persist(); updateDashboard();
+});
+$("globalMotors").addEventListener("change", () => {
+  settings.motors = num($("globalMotors").value);
+  persist(); updateDashboard();
+});
+$("thrustRatio").addEventListener("change", () => {
+  settings.ratio = num($("thrustRatio").value);
+  $("globalRatio").value = String(settings.ratio);
+  persist(); updateDashboard();
+});
+$("motorCount").addEventListener("change", () => {
+  settings.motors = num($("motorCount").value);
+  $("globalMotors").value = String(settings.motors);
+  persist(); updateDashboard();
+});
+
+function renderInventory() {
+  const category = $("filterCategory").value;
+  const query = $("searchParts").value.trim().toLowerCase();
+
+  const list = components.filter(c =>
+    (!category || c.category === category) &&
+    (!query || [c.name, c.category, c.notes, c.source].join(" ").toLowerCase().includes(query))
+  );
+
+  if (!list.length) {
+    $("inventory").innerHTML = '<div class="empty">No matching components. Add a component using the form above.</div>';
+    return;
+  }
+
+  $("inventory").innerHTML = list.map(c => {
+    const url = safeUrl(c.url);
+    return `<div class="component-card">
+      <div class="component-title">${escapeHtml(c.name)}</div>
+      <div class="component-meta">${escapeHtml(c.category)}</div>
+      <p>Mass per unit: <strong>${fmt(c.mass)} g</strong></p>
+      <p>Quantity: <strong>${fmt(c.qty, 0)}</strong> · Total: <strong>${fmt(c.mass * c.qty)} g</strong></p>
+      ${c.price !== "" && c.price != null ? `<p>Unit price: ₹${fmt(c.price, 2)} · Subtotal: ₹${fmt(c.price * c.qty, 2)}</p>` : ""}
+      ${c.source ? `<p class="component-meta">Source: ${escapeHtml(c.source)}</p>` : ""}
+      ${c.notes ? `<p>${escapeHtml(c.notes)}</p>` : ""}
+      ${url ? `<p><a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Open product reference ↗</a></p>` : ""}
+      <button class="btn secondary small" data-edit="${escapeHtml(c.id)}">Edit</button>
+      <button class="btn danger small" data-delete="${escapeHtml(c.id)}">Delete</button>
+    </div>`;
+  }).join("");
+
+  $("inventory").querySelectorAll("[data-edit]").forEach(b =>
+    b.addEventListener("click", () => editComponent(b.dataset.edit))
+  );
+  $("inventory").querySelectorAll("[data-delete]").forEach(b =>
+    b.addEventListener("click", () => deleteComponent(b.dataset.delete))
+  );
+}
+
+$("filterCategory").addEventListener("change", renderInventory);
+$("searchParts").addEventListener("input", renderInventory);
+
+$("componentForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const name = $("partName").value.trim();
+  const mass = num($("partMass").value);
+  const qty = num($("partQty").value);
+  const priceText = $("partPrice").value.trim();
+  const price = priceText === "" ? "" : num(priceText);
+
+  if (!name || !Number.isFinite(mass) || mass < 0 ||
+      !Number.isInteger(qty) || qty < 1 || qty > 10000 ||
+      (price !== "" && (!Number.isFinite(price) || price < 0))) {
+    alert("Please check the name, mass, quantity and price.");
+    return;
+  }
+
+  const id = $("editId").value || (
+    globalThis.crypto && crypto.randomUUID
+      ? crypto.randomUUID()
+      : String(Date.now()) + Math.random().toString(36).slice(2)
+  );
+
+  const component = {
+    id,
+    name,
+    category: $("category").value,
+    mass,
+    qty,
+    price,
+    url: $("partUrl").value.trim(),
+    source: $("partSource").value.trim(),
+    notes: $("partNotes").value.trim()
+  };
+
+  const index = components.findIndex(c => c.id === id);
+  if (index >= 0) components[index] = component;
+  else components.push(component);
+
+  persist();
+  resetForm();
+  renderInventory();
+  updateDashboard();
+  alert("Component saved.");
+});
+
+function editComponent(id) {
+  const c = components.find(x => x.id === id);
+  if (!c) return;
+
+  $("editId").value = c.id;
+  $("partName").value = c.name;
+  $("category").value = c.category;
+  $("partMass").value = c.mass;
+  $("partQty").value = c.qty;
+  $("partPrice").value = c.price ?? "";
+  $("partUrl").value = c.url || "";
+  $("partSource").value = c.source || "";
+  $("partNotes").value = c.notes || "";
+  $("formHeading").textContent = "Edit component";
+  $("savePart").textContent = "Save changes";
+  $("cancelEdit").hidden = false;
+  $("componentForm").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function resetForm() {
+  $("componentForm").reset();
+  $("editId").value = "";
+  $("partQty").value = "1";
+  $("formHeading").textContent = "Add a component";
+  $("savePart").textContent = "+ Save component";
+  $("cancelEdit").hidden = true;
+}
+$("cancelEdit").addEventListener("click", resetForm);
+
+function deleteComponent(id) {
+  const c = components.find(x => x.id === id);
+  if (!c || !confirm(`Delete "${c.name}" from the inventory?`)) return;
+  components = components.filter(x => x.id !== id);
+  persist();
+  renderInventory();
+  updateDashboard();
+}
+
+function csvCell(value) {
+  let s = String(value ?? "");
+  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+  return '"' + s.replace(/"/g, '""') + '"';
+}
+function downloadFile(filename, content, type) {
+  const blob = new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+}
+
+$("exportCsv").addEventListener("click", () => {
+  const headers = ["Name","Category","Mass per unit (g)","Quantity","Total mass (g)","Unit price (INR)","Subtotal (INR)","Product URL","Specification source","Notes"];
+  const rows = components.map(c => [
+    c.name,c.category,c.mass,c.qty,c.mass*c.qty,c.price,
+    c.price === "" ? "" : c.price*c.qty,c.url,c.source,c.notes
+  ]);
+  const csv = [headers, ...rows].map(row => row.map(csvCell).join(",")).join("\r\n");
+  downloadFile("bhoominetra_components.csv", "\uFEFF" + csv, "text/csv;charset=utf-8");
+});
+
+$("exportJson").addEventListener("click", () => {
+  const backup = {
+    application: "BHOOMINETRA",
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    settings,
+    components
+  };
+  downloadFile("bhoominetra_backup.json", JSON.stringify(backup, null, 2), "application/json");
+});
+
+$("importJson").addEventListener("click", async () => {
+  const file = $("importFile").files[0];
+  if (!file) {
+    alert("Choose a JSON backup file first.");
+    return;
+  }
+  try {
+    const parsed = JSON.parse(await file.text());
+    const list = Array.isArray(parsed) ? parsed : parsed.components;
+    if (!Array.isArray(list) || !list.every(c =>
+      c && typeof c.name === "string" &&
+      Number.isFinite(Number(c.mass)) && Number(c.mass) >= 0 &&
+      Number.isInteger(Number(c.qty)) && Number(c.qty) >= 1 &&
+      typeof c.category === "string"
+    )) {
+      throw new Error("Invalid component data");
+    }
+    if (!confirm("Importing will replace your current inventory. Continue?")) return;
+
+    components = list.map(c => ({
+      id: String(c.id || (Date.now() + Math.random())),
+      name: c.name.slice(0,100),
+      category: c.category,
+      mass: Number(c.mass),
+      qty: Number(c.qty),
+      price: c.price === "" || c.price == null ? "" : Number(c.price),
+      url: String(c.url || ""),
+      source: String(c.source || ""),
+      notes: String(c.notes || "")
+    }));
+    if (parsed.settings) {
+      if ([2,3,4,5].includes(Number(parsed.settings.ratio))) settings.ratio = Number(parsed.settings.ratio);
+      if ([4,6,8].includes(Number(parsed.settings.motors))) settings.motors = Number(parsed.settings.motors);
+    }
+    persist();
+    renderInventory();
+    updateDashboard();
+    alert("Backup imported.");
+  } catch (e) {
+    alert("Could not import this file. Select a valid BHOOMINETRA JSON backup.");
+  }
+});
+
+$("clearData").addEventListener("click", () => {
+  if (!confirm("Permanently delete all component records stored by this app in this browser? Export a backup first if needed.")) return;
+  components = [];
+  persist();
+  resetForm();
+  renderInventory();
+  updateDashboard();
+  alert("Local component inventory cleared.");
+});
+
+$("calculateRpm").addEventListener("click", () => {
+  const T = num($("rpmThrust").value);
+  const Ct = num($("ct").value);
+  const rho = num($("rho").value);
+  const Dmm = num($("diameter").value);
+
+  if (![T,Ct,rho,Dmm].every(Number.isFinite) ||
+      T <= 0 || Ct <= 0 || rho <= 0 || Dmm <= 0) {
+    $("rpmResults").innerHTML = "Enter positive, valid values in every field.";
+    return;
+  }
+
+  const D = Dmm / 1000;
+  const denominator = Ct * rho * Math.pow(D,4);
+  const revPerSecond = Math.sqrt(T / denominator);
+  const rpm = revPerSecond * 60;
+
+  if (!Number.isFinite(rpm) || rpm > 1e12) {
+    $("rpmResults").textContent = "Result outside the calculator's useful numeric range. Check the inputs and units.";
+    return;
+  }
+
+  const next10k = Math.ceil(rpm / 10000) * 10000;
+  $("rpmResults").innerHTML = `
+    <p>Propeller diameter: <strong>${fmt(D,5)} m</strong></p>
+    <p>Estimated rotational speed: <strong>${fmt(revPerSecond,2)} revolutions/s</strong></p>
+    <p>Estimated RPM: <strong>${fmt(rpm,0)} RPM</strong></p>
+    <p>Rounded upward to the next 10,000 RPM increment: <strong>${fmt(next10k,0)} RPM</strong></p>
+    <p class="description">The rounded value is only a numerical rounding exercise, not a validated motor speed recommendation.</p>
+  `;
+});
+
+safeLoad();
+$("globalRatio").value = String(settings.ratio);
+$("globalMotors").value = String(settings.motors);
+$("thrustRatio").value = String(settings.ratio);
+$("motorCount").value = String(settings.motors);
+renderInventory();
+updateDashboard();
+</script>
+</body>
+      </html>
